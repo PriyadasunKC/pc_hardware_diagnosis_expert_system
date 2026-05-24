@@ -1,0 +1,3 @@
+experta==1.9.4
+pyswip==0.2.10
+flask>=2.3.0
