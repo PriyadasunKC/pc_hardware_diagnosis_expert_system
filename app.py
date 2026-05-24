@@ -8,7 +8,7 @@ import os
 import sys
 import threading
 
-# ── UTF-8 fix: pc_troubleshoot_expert.py prints ✓ ✗ which crash on Windows cp1252
+# Fix Unicode characters that crash on Windows terminals
 os.environ.setdefault("PYTHONUTF8", "1")
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -21,7 +21,7 @@ from flask_cors import CORS
 
 from pc_troubleshoot_expert import PCTroubleshootingExpert, PCSymptom, BeepCode
 
-# ── Boot engine once; reuse across requests with a lock ──────────────────────
+# Create the engine once at startup and reuse it for all requests
 _lock = threading.Lock()
 _engine = PCTroubleshootingExpert()
 
@@ -36,7 +36,7 @@ VALID_SYMPTOMS = {
     "blue_screen", "memory_errors", "random_restart", "power_fluctuation",
 }
 
-# ── Flask app ────────────────────────────────────────────────────────────────
+# Initialize Flask app with CORS support
 app = Flask(__name__)
 CORS(app)
 
@@ -57,7 +57,7 @@ def _run(facts):
         return _engine.get_diagnosis_report()
 
 
-# ── Routes ───────────────────────────────────────────────────────────────────
+# API Routes
 
 @app.route("/")
 def index():
@@ -153,7 +153,7 @@ def knowledge_base():
     })
 
 
-# ── Entry point ──────────────────────────────────────────────────────────────
+# Run the server
 if __name__ == "__main__":
     print("\n" + "=" * 55)
     print("   PC HARDWARE DIAGNOSIS EXPERT SYSTEM")
